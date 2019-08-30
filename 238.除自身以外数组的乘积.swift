@@ -29,28 +29,57 @@
  */
 class Solution {
     func productExceptSelf(_ nums: [Int]) -> [Int] {
-        // from left to right 
 
+        // O(1)
+        var i = 1
+        var j = nums.count - 2
+
+        var res = Array(repeating: 1, count: nums.count)
+
+        var leftProduct = 1
+        var rightProduct = 1
+
+        while i < nums.count {
+            res[i-1] *= leftProduct
+            res[j+1] *= rightProduct
+
+            leftProduct *= nums[i-1]
+            rightProduct *= nums[j+1]
+
+            i += 1
+            j -= 1
+        }
+
+        res[0] *= rightProduct
+        res[res.count-1] *= leftProduct
+
+        return res
+    }
+
+    // O(n) 空间
+    private func _productExceptSelf(_ nums: [Int]) -> [Int] {
         var i = 1
         var j = nums.count - 2
 
         var leftProducts = Array(repeating: 1, count: nums.count)
         var rightProducts = Array(repeating: 1, count: nums.count)
 
-        while i < nums.count {
-            leftProducts[i] = nums[i-1] * leftProducts[i-1]
-            rightProducts[j] = nums[j+1] * rightProducts[j+1]
+        var res = Array(repeating: 1, count: nums.count)
+
+        while i < nums.count + 1 {
+            
+            res[i-1] *= leftProducts[i-1]
+            res[j+1] *= rightProducts[j+1]
+
+            if i < nums.count {
+                leftProducts[i] = nums[i-1] * leftProducts[i-1]
+                rightProducts[j] = nums[j+1] * rightProducts[j+1]
+            }
 
             i += 1
             j -= 1
         }
-
-        var res: [Int] = []
-
-        for i in 0..<nums.count {
-            res.append(leftProducts[i]*rightProducts[i])
-        }
-
+        
         return res
     }
 }
