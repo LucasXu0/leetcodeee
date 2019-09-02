@@ -32,31 +32,46 @@ class Solution {
     // 2. 遍历 Array 的同时查找 HashMap 是否存在 target - 当前 num 的值
     // 3. 如果存在则抛出
     func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
-        var map: [Int: Int] = [:]
 
-        // Use Local Variable
-        // 98.91%
-        // 5.12%
+        // 再做一次
+        var hashMap: [Int: Int] = [:]
+
+        for i in 0..<nums.count {
+            if let res = hashMap[target - nums[i]] {
+                return [res, i]
+            }
+
+            hashMap[nums[i]] = i
+        }
+
+        return []
+
+        // 第一次做的
+        // var map: [Int: Int] = [:]
+
+        // // Use Local Variable
+        // // 98.91%
+        // // 5.12%
+        // // for i in 0..<nums.count {
+        // //     let num = nums[i]
+        // //     if map.keys.contains(target - num) {
+        // //         return [map[target - num]!, i]
+        // //     } else {
+        // //         map[num] = i
+        // //     }
+        // // }
+
+        // // Use if let instead of map.keys.contains
         // for i in 0..<nums.count {
         //     let num = nums[i]
-        //     if map.keys.contains(target - num) {
-        //         return [map[target - num]!, i]
+        //     if let ans = map[target - num] {
+        //         return [ans, i]
         //     } else {
         //         map[num] = i
         //     }
         // }
 
-        // Use if let instead of map.keys.contains
-        for i in 0..<nums.count {
-            let num = nums[i]
-            if let ans = map[target - num] {
-                return [ans, i]
-            } else {
-                map[num] = i
-            }
-        }
-
-        return []
+        // return []
     }
 }
 
