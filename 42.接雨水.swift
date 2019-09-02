@@ -29,6 +29,38 @@
 class Solution {
     func trap(_ height: [Int]) -> Int {
         
+        return _trap1(height)
+    }
+
+    private func _trap1(_ height: [Int]) -> Int {
+        var stack: [Int] = []
+
+        var sum = 0
+
+        for i in 0..<height.count {
+            while !stack.isEmpty && height[stack.last!] < height[i] {
+
+                let current = stack.removeLast()
+
+                // removeLast() 如果栈变空说明这个边界，不用计算 
+                if stack.isEmpty {
+                    break
+                }
+
+                let minHeight = min(height[i], height[stack.last!]) // 取当前柱子和需要计算的柱子的前一根柱子的最小值
+                let height = minHeight - height[current] // 储水量
+                let width = i - 1 - stack.last!
+                let area = height * width
+                sum += area
+            }
+
+            stack.append(i)
+        }
+
+        return sum
+    }
+
+    private func _trap2(_ height: [Int]) -> Int {
         var maxNum = 0
 
         var leftMax: [Int] = []
