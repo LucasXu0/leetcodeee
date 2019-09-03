@@ -45,8 +45,38 @@
 class Solution {
     func inorderTraversal(_ root: TreeNode?) -> [Int] {
         // return inorder(root)   
-        return _inorder(root)
+        return _inorder2(root)
     }
+
+    // 第二次做
+    private func _inorder2(_ root: TreeNode?) -> [Int] {
+
+        var res: [Int] = []
+
+        var stack: [TreeNode] = []
+        var currentNode = root
+        
+        while currentNode != nil || !stack.isEmpty { // 如果当前节点不是空的，或者栈非空
+            while currentNode != nil {
+                stack.append(currentNode!)
+                currentNode = currentNode!.left
+            }
+
+            currentNode = stack.removeLast()
+            res.append(currentNode!.val)
+            currentNode = currentNode!.right
+        }
+
+        return res
+    }
+
+
+
+
+
+
+
+
 
     // 迭代
     private func _inorder(_ root: TreeNode?) -> [Int] {
