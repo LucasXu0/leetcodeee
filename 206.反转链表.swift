@@ -37,7 +37,17 @@
  */
 class Solution {
     func reverseList(_ head: ListNode?) -> ListNode? {
-        return _reverseList(head)
+        // return _reverseList(head)
+        return _reverseList_recursion(head)
+    }
+
+    private func _reverseList_recursion(_ head: ListNode?) -> ListNode? {
+        if head == nil || head?.next == nil { return head }
+
+        let res = _reverseList_recursion(head?.next)
+        head?.next?.next = head
+        head?.next = nil
+        return res
     }
 
     private func _reverseList(_ head: ListNode?) -> ListNode? {
