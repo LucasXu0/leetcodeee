@@ -41,15 +41,47 @@
 class Solution {
     func lengthOfLongestSubstring(_ s: String) -> Int {
 
+        return _lengthOfLongestSubstring2(s)
+    }
+
+    private func _lengthOfLongestSubstring2(_ s: String) -> Int {
+
+        var start = 0
+        var maxLength = 0
+
+        var charactersMap: [Character: Int] = [:]
+
+        let characters = Array(s)
+
+        for i in 0..<characters.count {
+
+            // 同下
+            if let find = charactersMap[characters[i]] {
+                start = max(start, find + 1) //  find 的位置起码要比 start 大
+            }
+
+            charactersMap[characters[i]] = i
+            
+            maxLength = max(maxLength, i - start + 1)
+        }
+
+        return maxLength
+    }
+
+    private func _lengthOfLongestSubstring(_ s: String) -> Int {
+
         var maxLength = 0
         var start = 0
         var hashMap: [Character: Int] = [:]
 
-        let characters: [Character] = Array(s)
+        let characters = Array(s)
+
         for i in 0..<characters.count {
-            if let index = hashMap[characters[i]], index >= start { // 遇到想到的计算长度
-                maxLength = max(maxLength, i - index)
-                start = index + 1
+
+            // 从哈希表中找是否存在当前元素, 并且找到的 元素的位置 >= 起点
+            // 更新起点位置
+            if let find = hashMap[characters[i]], find >= start {
+                start = find + 1
             } else {
                 maxLength = max(maxLength, i - start + 1)
             }
