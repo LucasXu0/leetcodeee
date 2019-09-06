@@ -49,7 +49,25 @@
  */
 class Solution {
     func oddEvenList(_ head: ListNode?) -> ListNode? {
-        return bruteForce(head)
+        // return bruteForce(head)
+        return _oddEvenList(head)
+    }
+
+    private func _oddEvenList(_ head: ListNode?) -> ListNode? {
+        var odd = head
+        var even = head?.next
+        var evenHead = even
+        
+        while even != nil && even!.next != nil {
+            odd!.next = odd!.next?.next
+            even!.next = even!.next?.next
+            odd = odd!.next
+            even = even!.next
+        }
+
+        odd?.next = evenHead
+
+        return head
     }
 
     private func copyList(_ head: ListNode?) -> ListNode? {
