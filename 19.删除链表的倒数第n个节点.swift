@@ -47,6 +47,32 @@ class Solution {
         
         // double pointers
 
+        // 问题在于消除差距
+        // 倒数第 N 个，只要延迟第 N -1 个启动即可
+
+        var pre: ListNode? = ListNode(0)
+        pre?.next = head
+
+        var fast = pre
+        var slow = pre
+        
+        // 快指针先走 n + 1 步
+        for i in 1...n + 1 {
+            fast = fast?.next
+        }
+
+        while fast != nil {
+            fast = fast?.next
+            slow = slow?.next
+        }
+
+        slow?.next = slow?.next?.next
+
+        return pre?.next
+    }
+
+    // 第一次做的
+    private func _removeNthFromEnd(_ head: ListNode?, _ n: Int) -> ListNode? {
         let pre: ListNode? = ListNode(0)
         pre?.next = head
 
