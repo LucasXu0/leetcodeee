@@ -74,6 +74,43 @@
  */
 class Solution {
     func isValidSudoku(_ board: [[Character]]) -> Bool {
+        
+        // 将九宫格分为9个区域
+        // i < 3, j < 3 -> 0
+        // ...
+        // i > 6, j > 6 -> 8
+
+        let m = board.count
+
+        var rowRecorder: [[Character: Int]] = Array(repeating: [:], count: 9)
+        var columnRecorder: [[Character: Int]] = Array(repeating: [:], count: 9)
+        var areaRecorder: [[Character: Int]] = Array(repeating: [:], count: 9)
+
+        for i in 0..<m {
+            for j in 0..<m {
+
+                let character = board[i][j]
+
+                guard character != "." else { continue }
+                
+                let k = i / 3 * 3 + j / 3 // count current character belong to which area
+
+                if rowRecorder[j][character] != nil || columnRecorder[i][character] != nil || areaRecorder[k][character] != nil {
+                    return false
+                }
+
+                rowRecorder[j][character] = j
+                columnRecorder[i][character] = i
+                areaRecorder[k][character] = k
+
+            }
+        }
+
+        return true
+    }
+
+    // 第一次的做法
+    private func _isValidSudoku(_ board: [[Character]]) -> Bool {
         var hashMap = Set<Character>()
 
         let m = board.count
