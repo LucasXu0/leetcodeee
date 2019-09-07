@@ -30,92 +30,51 @@
  */
 class Solution {
     func threeSum(_ nums: [Int]) -> [[Int]] {
-        // sort this nums
-
         var res: [[Int]] = []
         
         let count = nums.count
 
         guard count > 2 else { return res }
 
+        // sort this nums
         var nums = nums.sorted()
         
         // optimization 1. no solution if first value and last value have same symbol.
         // optimization 2. no solution if first value is bigger than 0.
-        guard nums.first! < 0 && nums.last! > 0 else { return res }
+        guard nums.first! <= 0 && nums.last! >= 0 else { return res }
+        
+        var left = 0
+        var right = 0
+        var sum = 0
         
         for i in 0..<count-2 {
-            // find the first value that is not repeat
-            if nums[i] == nums[i+1] { continue }
+            // if nums[i] is greater than 0 means the sum of the rest array can not be zero
             if nums[i] > 0 { break }
+            // find the first value that is not repeat
+            if i > 0 && nums[i] == nums[i-1] { continue }
 
-            var left = i + 1
-            var right = count - 1
+            left = i + 1
+            right = count - 1
 
             while left < right {
-                let sum = nums[i] + nums[left] + nums[right]
-                
+                sum = nums[i] + nums[left] + nums[right]
+
                 if sum == 0 {
                     res.append([nums[i], nums[left], nums[right]])
-                } else if sum > 0 {
-                    right -= 1
-                    while nums[right] == nums[right-1] {
+                    repeat {
                         right -= 1
-                    }
-                } else {
-                    left += 1
-                    while nums[left] == nums[left+1] {
+                    } while left < right && nums[right] == nums[right+1] 
+                    repeat {
                         left += 1
-                    }
-                }
-            }
-        }
-
-        return res
-    }
-
-    // this solution does not filter the same value case 
-    private func _threeSum(_ nums: [Int]) -> [[Int]] {
-        // convert this problem to two sums
-        var res: [[Int]] = []
-        for i in 0..<nums.count {
-            let target = 0 - nums[i]
-            let foo = twoSum(nums, target, i, nums.count)
-            foo.forEach {
-                res.append($0.append(i))
-            }
-        }
-        return res
-    }
-
-    private func twoSum(_ nums: [Int], _ target: Int, _ start: Int, _ end: Int) -> [[Int]] {
-
-        guard start <= end else { return [] } 
-        
-        var map: [Int: Int] = [:]
-        var res: [[Int]] = []
-
-        for i in start...end {
-            if let value = map[target - nums[i]] {
-                res.append([value, i])
-            }
-            map[nums[i]] = i
-        }
-
-        return res
-    }
-
-    // 包含了重复元素
-    private func bruteForce(_ nums: [Int]) -> [[Int]] {
-        var res: [[Int]] = []
-
-        let count = nums.count
-        for i in 0..<count-2 {
-            for j in i+1..<count-1 {
-                for k in j+1..<count {
-                    if nums[i] + nums[j] + nums[k] == 0 {
-                        res.append([nums[i], nums[j], nums[k]])
-                    }
+                    } while left < right && nums[left] == nums[left-1]
+                } else if sum > 0 {
+                    repeat {
+                        right -= 1
+                    } while left < right && nums[right] == nums[right+1] 
+                } else {
+                    repeat {
+                        left += 1
+                    } while left < right && nums[left] == nums[left-1]
                 }
             }
         }
@@ -123,4 +82,3 @@ class Solution {
         return res
     }
 }
-
