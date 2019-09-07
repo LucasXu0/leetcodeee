@@ -37,6 +37,40 @@
 class Solution {
     func topKFrequent(_ nums: [Int], _ k: Int) -> [Int] {
         
+        // 利用桶排序
+
+        var map: [Int: Int] = [:]
+
+        for num in nums {
+            map[num, default: 0] += 1
+        }
+
+        var buckets: [[Int]] = Array(repeating: [], count: nums.count + 1) // 0 不是出现的情况，所以桶 + 1
+
+        map.forEach {
+            buckets[$0.value].append($0.key)
+        }
+
+        var res: [Int] = []
+        var i = buckets.count - 1
+
+        while i > 0 {
+            if !buckets[i].isEmpty {
+                res.append(contentsOf: buckets[i])
+            }
+
+            if res.count == k {
+                break
+            }
+
+            i -= 1
+        }
+
+        return res
+    }
+
+    // O(n log n)
+    private func _topKFrequent(_ nums: [Int], _ k: Int) -> [Int] {
         var map: [Int: Int] = [:]
 
         for num in nums {
