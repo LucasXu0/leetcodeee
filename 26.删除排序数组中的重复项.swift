@@ -57,20 +57,35 @@ class Solution {
     func removeDuplicates(_ nums: inout [Int]) -> Int {
         // Double Pointers
 
-        guard nums.count > 0 else { return 0 }
-
-        var i = 0
-        var j = 1
+        var i = -1
+        var j = i + 1
 
         while j < nums.count {
-            if nums[i] != nums[j] {
+
+            if i == -1 || nums[i] != nums[j] {
                 i += 1
                 nums[i] = nums[j]
             }
+
             j += 1
         }
 
-        return i+1
+        return i + 1
+
+        // guard nums.count > 0 else { return 0 }
+
+        // var i = 0
+        // var j = 1
+
+        // while j < nums.count {
+        //     if nums[i] != nums[j] {
+        //         i += 1
+        //         nums[i] = nums[j]
+        //     }
+        //     j += 1
+        // }
+
+        // return i+1
     }
 }
 
