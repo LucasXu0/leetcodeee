@@ -33,7 +33,7 @@ class Solution {
     func maxProduct(_ nums: [Int]) -> Int {
 
         // dp
-        // return dp(nums)        
+        return dp(nums)        
 
         var preMin = nums[0]
         var preMax = nums[0]
@@ -53,31 +53,26 @@ class Solution {
     }
 
     private func dp(_ nums: [Int]) -> Int {
-        var previousRows = nums
-        var currentRows = previousRows
+        
+        // 由于存在负数, 所以要记录前面的最小值和最大值
+        
+        var preMax = 1
+        var preMin = 1
 
-        var maximum = findMax(nums)
-
-        for i in 1..<nums.count {
-            for j in i..<nums.count {
-                currentRows[j] = previousRows[j-1] * nums[j]
-                maximum = max(maximum, currentRows[j])
-            }
-
-            previousRows = currentRows
-        }
-
-        return maximum
-    }
-
-    private func findMax(_ nums: [Int]) -> Int {
-        var maximum = Int.min
+        var maxNum = Int.min
 
         for num in nums {
-            maximum = max(maximum, num)
+            if num < 0 {
+                swap(&preMax, &preMin)
+            }
+
+            preMax = max(preMax * num, num)
+            preMin = min(preMin * num, num)
+
+            maxNum = max(maxNum, preMax)
         }
 
-        return maximum
+        return maxNum
     }
 }
 
