@@ -37,11 +37,11 @@
 class Solution {
     func nthSuperUglyNumber(_ n: Int, _ primes: [Int]) -> Int {
         
-        return nth_super_ugly_number_heap(n, primes)
+        // return nth_super_ugly_number_heap(n, primes)
+        return nth_super_ugly_number_dp(n, primes)
     }
 
     // 建立小顶堆
-    // 
     func nth_super_ugly_number_heap(_ n: Int, _ primes: [Int]) -> Int {
         
         var minHeap = Heap<Int>(sort: <)
@@ -62,6 +62,34 @@ class Solution {
 
         return minHeap.peek()!
     }    
+
+    // dp
+    func nth_super_ugly_number_dp(_ n: Int, _ primes: [Int]) -> Int {
+
+        // 多个指针保存记录
+        let pc = primes.count
+        var pointers = Array(repeating: 0, count: pc)
+
+        var dp = Array(repeating: 1, count: n)
+
+        for i in 1..<n {
+            var minimum = Int.max
+
+            for i in 0..<pc {
+                minimum = min(minimum, primes[i]*dp[pointers[i]])
+            }
+
+            dp[i] = minimum
+
+            for j in 0..<pc {
+                while dp[i] >= primes[j] * dp[pointers[j]] {
+                    pointers[j] += 1
+                }
+            }
+        }
+
+        return dp[n-1]
+    }
 }
 
 public struct Heap<T> {
