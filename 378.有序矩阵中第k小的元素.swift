@@ -36,10 +36,52 @@
 class Solution {
     func kthSmallest(_ matrix: [[Int]], _ k: Int) -> Int {
 
-        return bruteForce(matrix, k)
+        // return kth_smallest_heap(matrix, k)
+        return kth_smallest_binary_search(matrix, k)
     }
 
-    private func bruteForce(_ matrix: [[Int]], _ k: Int) -> Int {
+    func kth_smallest_binary_search(_ matrix: [[Int]], _ k: Int) -> Int {
+
+        let n = matrix.count
+
+        func counter(_ target: Int) -> Int {
+            var i = 0
+            var j = n - 1
+
+            var count = 0
+
+            while j >= 0 && i < n {
+                if matrix[i][j] <= target {
+                    count += j + 1
+                    i += 1
+                } else {
+                    j -= 1
+                }
+            }
+
+            return count
+        }
+
+        var low = matrix[0][0]
+        var high = matrix[n-1][n-1]
+
+        while low < high {
+            let mid = low + (high - low) / 2
+
+            let count = counter(mid)
+
+            if count < k {
+                low = mid + 1
+            } else {
+                high = mid
+            }
+        }
+
+        return high
+    }
+
+    // heap
+    func kth_smallest_heap(_ matrix: [[Int]], _ k: Int) -> Int {
 
         var heap = Heap<Int>(sort: >)
 
