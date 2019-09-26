@@ -33,7 +33,51 @@
  */
 class Solution {
     func findKthLargest(_ nums: [Int], _ k: Int) -> Int {
-        return bruteForce(nums, k)
+        // return bruteForce(nums, k)
+        var nums = nums
+        return top_kth_partition(&nums, nums.count - k)
+    }
+
+    func partition(_ arr: inout [Int], _ left: Int, _ right: Int) -> Int {
+
+        if left == right {
+            return left
+        }
+
+        let pi = arr[right]
+        
+        var i = left
+        
+        for j in left..<right {
+            if arr[j] < pi {
+                arr.swapAt(i, j)
+                i += 1
+            }
+        }
+
+        arr.swapAt(i, right)
+
+        return i
+    }
+
+    func top_kth_partition(_ nums: inout [Int], _ k: Int) -> Int {
+
+        var left = 0
+        var right = nums.count - 1
+
+        while left <= right {
+            let pi = partition(&nums, left, right)
+
+            if pi == k {
+                return nums[pi]
+            } else if pi > k {
+                right = pi - 1
+            } else {
+                left = pi + 1
+            }
+        }
+
+        return nums[k]
     }
 
     private func _findKthLargest(_ nums: [Int], _ k: Int) -> Int {
