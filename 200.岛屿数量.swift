@@ -41,26 +41,34 @@
  */
 class Solution {
 
-    var uf: [Int] = []
+    var uf: [Int]!
+    var rank: [Int]!
     var count = 0
     var m = 0
 
     func find(_ node: Int) -> Int {
-        var node = node
-        while uf[node] != node {
-            uf[node] = uf[uf[node]]
-            node = uf[node]
+        if uf[node] != node {
+            uf[node] = find(uf[node])
         }
-        return node
+        return uf[node]
     }
 
     func union(_ n1: Int, _ n2: Int) {
         let f1 = find(n1)
         let f2 = find(n2)
-        if f1 != f2 {
+
+        if f1 == f2 { return }
+        
+        if rank[f1] > rank[f2] {
             uf[f2] = f1
-            count -= 1
+        } else if rank[f1] < rank[f2] {
+            uf[f1] = f2
+        } else {
+            uf[f1] = f2
+            rank[f2] += 1
         }
+    
+        count -= 1
     }
 
     func node(_ i: Int, _ j: Int) -> Int {
@@ -78,8 +86,12 @@ class Solution {
 
         count = fuck
 
+        uf = Array(repeating: 0, count: count)
+        rank = Array(repeating: 0, count: count)
+
         for i in 0..<count{
-            uf.append(i)
+            uf[i] = i
+            rank[i] = 0
         }
 
         for i in 0..<n {
