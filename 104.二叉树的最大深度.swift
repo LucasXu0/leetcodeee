@@ -47,15 +47,16 @@
 class Solution {
     func maxDepth(_ root: TreeNode?) -> Int {
 
-        func depth(_ node: TreeNode?) -> Int {
-            if let node = node {
-                return max(depth(node.left), depth(node.right)) + 1
-            } else {
-                return 0
-            }
-        }
-
-        return depth(root)
+        return dfs(root)
     }
-}
+
+    func dfs(_ node: TreeNode?) -> Int {
+
+        if let node = node {
+            return max(dfs(node.left), dfs(node.right)) + 1
+        } else {
+            return 0
+        }
+    }
+}   
 
