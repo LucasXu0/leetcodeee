@@ -50,6 +50,46 @@
 class Solution {
     func floodFill(_ image: [[Int]], _ sr: Int, _ sc: Int, _ newColor: Int) -> [[Int]] {
         
+        return bfs(image, sr, sc, newColor)
+    }
+
+    func bfs(_ image: [[Int]], _ sr: Int, _ sc: Int, _ newColor: Int) -> [[Int]] {
+
+        if image[sr][sc] == newColor { return image }
+
+        var image = image 
+
+        let dx = [-1, 0, 1, 0]
+        let dy = [0, 1, 0, -1]
+
+        let rawColor = image[sr][sc]
+
+        var toFillPoint: [(Int, Int)] = [(sr, sc)]
+
+        let n = image.count 
+        let m = image[0].count
+        var visited: [[Int]] = Array(repeating: Array(repeating: 0, count: m), count: n)
+
+        while !toFillPoint.isEmpty {
+            let (sr, sc) = toFillPoint.removeFirst()
+
+            image[sr][sc] = newColor
+
+            for i in 0..<4 {
+                let x = sr + dx[i]
+                let y = sc + dy[i]
+
+                if x >= 0 && x < image.count && y >= 0 && y < image[0].count && image[x][y] == rawColor && visited[x][y] == 0 { 
+                    toFillPoint.append((x, y))
+                    visited[x][y] = 1
+                } 
+            }
+        }
+
+        return image
+    }
+
+    func dfs(_ image: [[Int]], _ sr: Int, _ sc: Int, _ newColor: Int) -> [[Int]] {
         if image[sr][sc] == newColor { return image }
 
         var image = image
