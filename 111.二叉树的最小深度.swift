@@ -50,6 +50,28 @@
 class Solution {
     func minDepth(_ root: TreeNode?) -> Int {
 
+        func dfs(_ node: TreeNode?) -> Int {
+
+            guard let node = node else { return 0 }
+
+            if node.left == nil && node.right == nil {
+                return 1
+            }
+
+            let left = dfs(node.left)
+            let right = dfs(node.right)
+
+            if node.left == nil || node.right == nil {
+                return left + right + 1
+            }
+
+            return min(left, right) + 1
+        }
+
+        return dfs(root)
+    }
+
+    func min_depth(_ root: TreeNode?) -> Int {
         guard let root = root else { return 0 }
 
         var md = Int.max
@@ -70,8 +92,6 @@ class Solution {
 
         return md
     }
-
-
 }
 // @lc code=end
 
