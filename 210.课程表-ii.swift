@@ -56,8 +56,59 @@
 
 // @lc code=start
 class Solution {
+
+    func dfs(_ numCourses: Int, _ prerequisites: [[Int]]) -> [Int] {
+
+        var flags: [Int] = Array(repeating: 0, count: numCourses)
+        var adjacency: [[Int]] = Array(repeating: [], count: numCourses)
+
+        for ele in prerequisites {
+            let cur = ele[0]
+            let pre = ele[1]
+
+            adjacency[pre].append(cur)
+        }
+
+        var res: [Int] = []
+
+        func helper(_ i: Int) -> Bool {
+
+
+            if flags[i] == -1 { return true } // 没有访问过
+            if flags[i] == 1 { 
+                res = []
+                return false 
+            } // 第二次访问, 有环
+
+            flags[i] = 1
+
+            for cur in adjacency[i] {
+                if !helper(cur) {
+                    res = []
+                    return false
+                }
+            }
+
+            flags[i] = -1
+
+            res.append(i)   
+
+            return true
+        }
+
+        for i in 0..<numCourses {
+            if !helper(i) {
+                return []
+            }
+        }
+
+        return res.reversed()
+    }
+
     func findOrder(_ numCourses: Int, _ prerequisites: [[Int]]) -> [Int] {
         
+        return dfs(numCourses, prerequisites)
+
         var adjacency: [[Int]] = Array(repeating: [], count: numCourses)
         var indegrees: [Int] = Array(repeating: 0, count: numCourses)
 
