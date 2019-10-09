@@ -54,6 +54,8 @@
 class Solution {
     func canFinish(_ numCourses: Int, _ prerequisites: [[Int]]) -> Bool {
         
+        return dfs(numCourses, prerequisites)
+
         var numCourses = numCourses
 
         // 维护邻接表
@@ -88,6 +90,44 @@ class Solution {
         }
 
         return numCourses == 0
+    }
+
+    func dfs(_ numCourses: Int, _ prerequisites: [[Int]]) -> Bool {
+
+        var adjacency: [[Int]] = Array(repeating: [], count: numCourses)
+        var flags: [Int] = Array(repeating: 0, count: numCourses)
+
+        for ele in prerequisites {
+            let cur = ele[0]
+            let pre = ele[1]
+
+            adjacency[pre].append(cur)
+        }
+
+        func helper(_ i: Int) -> Bool {
+            if flags[i] == -1 { return true }
+            if flags[i] == 1 { return false }
+
+            flags[i] = 1
+
+            for cur in adjacency[i] {
+                if !helper(cur) {
+                    return false 
+                }
+            }
+
+            flags[i] = -1
+
+            return true
+        }
+
+        for i in 0..<numCourses {
+            if !helper(i) {
+                return false
+            }
+        }
+
+        return true
     }
 }
 // @lc code=end
