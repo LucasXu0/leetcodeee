@@ -62,18 +62,58 @@
  *     }
  * }
  */
-class Solution {
-    func rob(_ root: TreeNode?) -> Int {
-        return dfs(root).max()!
+
+extension TreeNode: Hashable {
+    public static func == (lhs: TreeNode, rhs: TreeNode) -> Bool {
+        return lhs.val == rhs.val && lhs.left == rhs.left && lhs.right == rhs.right
     }
 
-    func dfs(_ root: TreeNode?) -> [Int] {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(left)
+        hasher.combine(right)
+        hasher.combine(val)
+    }
+}
+
+class Solution {
+
+    private var memo: [TreeNode: Int] = [:]
+
+    func rob(_ root: TreeNode?) -> Int {
+        // return _dfs(root).max()!
+        return dfs(root)
+    }
+
+    func _dfs(_ root: TreeNode?) -> [Int] {
         guard let root = root else { return [0, 0] }
 
-        let left = dfs(root.left)
-        let right = dfs(root.right)
+        let left = _dfs(root.left)
+        let right = _dfs(root.right)
 
         return [left.max()! + right.max()!, root.val + left[0] + right[0]]
+    }
+
+    func dfs(_ root: TreeNode?) -> Int {
+
+        guard let root = root else { return 0 }
+
+        if let val = memo[root] { return val }
+
+        var val = root.val
+
+        if let left = root.left {
+            val += dfs(left.left) + dfs(left.right)
+        }
+
+        if let right = root.right {
+            val += dfs(right.left) + dfs(right.right)
+        }
+
+        val = max(dfs(root.left) + dfs(root.right), val)
+
+        memo[root] = val
+
+        return val
     }
 }
 // @lc code=end
